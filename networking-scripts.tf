@@ -26,6 +26,8 @@ resource "google_compute_subnetwork" "subnet-with-secondary-ip" {
   }
 }
 
+
+################## Locals ##################
 locals {
   project-id = "sheltoncardin"
   vpc-name = "vpc-nv-poc"
@@ -35,5 +37,5 @@ locals {
   secondary-ip-range-2-ran = "172.16.33.0/24"
   secondary-ip-range-1    = "sec-ip-range-composer-pods"
   secondary-ip-range-1-ran = "172.16.32.0/24"
-  
+
 }
