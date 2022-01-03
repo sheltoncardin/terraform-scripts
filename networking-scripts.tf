@@ -53,12 +53,26 @@ resource "google_compute_firewall" "fw-vpc-poc-20000-egress-allow-all-vpc-all-tc
   }
 }
 
+#fw-vpc-poc-19900-egrss-allow-all-on-prem-all-tcp
 resource "google_compute_firewall" "fw-vpc-poc-19900-egrss-allow-all-on-prem-all-tcp" {
   name    = local.firewall19900
   network = local.vpc-name
   source_ranges=["172.16.0.0/16,172.23.0.0/16,172.25.0.0/16"]
   direction = local.directionout
   priority = 19900
+  allow {
+    protocol = "all"
+    ports=["0-65000"]
+
+  }
+}
+
+resource "google_compute_firewall" "fw-vpc-poc-19800-ingress-allow-on-prem-all-ssh-tcp" {
+  name    = local.firewall19800
+  network = local.vpc-name
+  source_ranges=["172.16.0.0/16,172.23.0.0/16,172.25.0.0/16"]
+  direction = local.directionin
+  priority = 19800
   allow {
     protocol = "all"
     ports=["0-65000"]
@@ -81,4 +95,5 @@ locals {
   firewall65000 = "fw-vpc-poc-65000-egress-deny-all" 
   firewall20000 = "fw-vpc-poc-20000-egress-allow-all-vpc-all-tcp"
   firewall19900 = "fw-vpc-poc-19900-egrss-allow-all-on-prem-all-tcp"
+  firewall19800 = "fw-vpc-poc-19800-ingress-allow-on-prem-all-ssh-tcp"
 }
