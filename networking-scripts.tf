@@ -25,7 +25,46 @@ resource "google_compute_subnetwork" "subnet-with-secondary-ip" {
     ip_cidr_range = local.secondary-ip-range-2-ran
   }
 }
+################################ Firewall ############################
 
+resource "google_compute_firewall" "fw-vpc-poc-65000-egress-deny-all" {
+  name    = local.firewall65000
+  network = local.vpc-name
+  source_ranges=["0.0.0.0/0"]
+  direction = local.directionout
+  priority = 65000
+  deny {
+    protocol = "all"
+    ports=["0-65000"]
+
+  }
+}
+
+resource "google_compute_firewall" "fw-vpc-poc-20000-egress-allow-all-vpc-all-tcp" {
+  name    = local.firewall20000
+  network = local.vpc-name
+  source_ranges=["172.16.0.0/18"]
+  direction = local.directionout
+  priority = 20000
+  allow {
+    protocol = "all"
+    ports=["0-65000"]
+
+  }
+}
+
+resource "google_compute_firewall" "fw-vpc-poc-19900-egrss-allow-all-on-prem-all-tcp" {
+  name    = local.firewall19900
+  network = local.vpc-name
+  source_ranges=["172.16.0.0/16,172.23.0.0/16,172.25.0.0/16"]
+  direction = local.directionout
+  priority = 19900
+  allow {
+    protocol = "all"
+    ports=["0-65000"]
+
+  }
+}
 
 ################## Locals ##################
 locals {
@@ -37,5 +76,9 @@ locals {
   secondary-ip-range-2-ran = "172.16.33.0/24"
   secondary-ip-range-1    = "sec-ip-range-composer-pods"
   secondary-ip-range-1-ran = "172.16.32.0/24"
-
+  directionout = "EGRESS"
+  directionin = "INGRESS"
+  firewall65000 = "fw-vpc-poc-65000-egress-deny-all" 
+  firewall20000 = "fw-vpc-poc-20000-egress-allow-all-vpc-all-tcp"
+  firewall19900 = "fw-vpc-poc-19900-egrss-allow-all-on-prem-all-tcp"
 }
