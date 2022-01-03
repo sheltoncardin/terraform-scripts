@@ -115,7 +115,11 @@ resource "google_compute_firewall" "fw-vpc-poc-allow-http-https-dns-19500-egress
   allow {
     protocol = "tcp"
     ports=["80,443,53"]
-  }##Neeeds a update 
+  }
+  allow {
+    protocol = "udp"
+    ports=["53"]
+  }
 }
 
 resource "google_compute_firewall" "fw-vpc-poc-allow-datafusion-19400-egress" {
