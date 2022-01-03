@@ -2,15 +2,17 @@
     project = local.project-id
     region = us-central1
 } */
-
-####################################VPC######################################
-
+############################################################################################################
+#                                               VPC
+############################################################################################################
 resource "google_compute_network" "vpc-nv-poc" {
   name = local.vpc-name
   auto_create_subnetworks = false
 
 }
-################################### Subnetting ################################
+#########################################################################################################
+#                                            Subnetting 
+#########################################################################################################
 resource "google_compute_subnetwork" "subnet-with-secondary-ip" {
   name          = "sb-vpc-nv-poc-us-east1"
   ip_cidr_range = local.primary-ip-range-cidr
@@ -25,8 +27,9 @@ resource "google_compute_subnetwork" "subnet-with-secondary-ip" {
     ip_cidr_range = local.secondary-ip-range-2-ran
   }
 }
-################################ Firewall ############################
-
+################################################################################################
+#                                             Firewall 
+################################################################################################
 resource "google_compute_firewall" "fw-vpc-poc-65000-egress-deny-all" {
   name    = local.firewall65000
   network = local.vpc-name
@@ -134,7 +137,9 @@ resource "google_compute_firewall" "fw-vpc-poc-allow-datafusion-19400-egress" {
 
   }
 }
-################## Locals ##################
+############################################################################################################
+#                                                  Locals
+############################################################################################################ 
 locals {
   project-id = "sheltoncardin"
   vpc-name = "vpc-nv-poc"
